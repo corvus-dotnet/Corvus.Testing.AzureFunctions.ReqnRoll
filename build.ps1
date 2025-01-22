@@ -198,7 +198,9 @@ task PreTestReport {}
 task PostTestReport {}
 task PreAnalysis {}
 task PostAnalysis {}
-task PrePackage {}
+task PrePackage {
+    exec { dotnet-gitversion /output json /nofetch /config $here/GitVersion.yml }
+}
 task PostPackage {}
 task PrePublish {}
 task PostPublish {}
