@@ -189,9 +189,7 @@ task RunFirst {}
 task PreInit {}
 task PostInit {}
 task PreVersion {}
-task PostVersion {
-    exec { dotnet-gitversion /output json /nofetch /config $here/GitVersion.yml }
-}
+task PostVersion {}
 task PreBuild {}
 task PostBuild {}
 task PreTest Init, Install-AzureFunctionsSDK, {}
@@ -205,3 +203,7 @@ task PostPackage {}
 task PrePublish {}
 task PostPublish {}
 task RunLast {}
+
+task versionDebug -Before Package {
+    exec { dotnet-gitversion /output json /nofetch /config $here/GitVersion.yml }
+}
