@@ -188,7 +188,9 @@ task . FullBuild
 task RunFirst {}
 task PreInit {}
 task PostInit {}
-task PreVersion {}
+task PreVersion {
+    exec { dotnet-gitversion /output json /nofetch /config $here/GitVersion.yml }
+}
 task PostVersion {}
 task PreBuild {}
 task PostBuild {}
@@ -198,9 +200,7 @@ task PreTestReport {}
 task PostTestReport {}
 task PreAnalysis {}
 task PostAnalysis {}
-task PrePackage {
-    exec { dotnet-gitversion /output json /nofetch /config $here/GitVersion.yml }
-}
+task PrePackage {}
 task PostPackage {}
 task PrePublish {}
 task PostPublish {}
