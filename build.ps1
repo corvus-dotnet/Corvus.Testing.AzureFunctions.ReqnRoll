@@ -188,10 +188,10 @@ task . FullBuild
 task RunFirst {}
 task PreInit {}
 task PostInit {}
-task PreVersion {
+task PreVersion {}
+task PostVersion {
     exec { dotnet-gitversion /output json /nofetch /config $here/GitVersion.yml }
 }
-task PostVersion {}
 task PreBuild {}
 task PostBuild {}
 task PreTest Init, Install-AzureFunctionsSDK, {}
