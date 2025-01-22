@@ -204,6 +204,28 @@ task PrePublish {}
 task PostPublish {}
 task RunLast {}
 
-task versionDebug -Before Package {
-    exec { dotnet-gitversion /output json /nofetch /config $here/GitVersion.yml }
+# Override for debugging purposes
+task GitVersion -If {!$SkipGitVersion} {
+    
+    if ($GitVersion.Keys.Count -gt 0) {
+        Write-Build Cyan "Version details overridden by environment variable:`n$($GitVersion | ConvertTo-Json)"
+    }
+    else {
+        exec { dotnet --list-sdks }
+    
+        Install-DotNetTool -Name "GitVersion.Tool" -Version $GitVersionToolVersion
+        Write-Build Cyan "GitVersion Config: $GitVersionConfig"
+        exec { dotnet-gitversion /output json /nofetch /config $GitVersionConfig } | Tee-Object -Variable gitVersionOutputJson
+        
+        Write-Build Cyan "GitVersion Output:`n$gitVersionOutputJson"
+    
+        $env:GitVersionOutput = $gitVersionOutputJson
+        $script:GitVersion = $gitVersionOutputJson | ConvertFrom-Json -AsHashtable
+    
+        # Set the native GitVersion output as environment variables and build server variables
+        foreach ($var in $script:GitVersion.Keys) {
+            Set-Item -Path "env:GITVERSION_$var" -Value $GitVersion[$var]
+            Set-BuildServerVariable -Name "GitVersion.$var" -Value $GitVersion[$var]
+        }
+    }
 }
