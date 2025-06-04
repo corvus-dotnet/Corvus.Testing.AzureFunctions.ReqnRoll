@@ -3,11 +3,11 @@
 .SYNOPSIS
     Runs a .NET flavoured build process.
 .DESCRIPTION
-    This script was scaffolded using a template from the Endjin.RecommendedPractices.Build PowerShell module.
-    It uses the InvokeBuild module to orchestrate an opinonated software build process for .NET solutions.
+    This script was scaffolded using a template from the ZeroFailed project.
+    It uses the InvokeBuild module to orchestrate an opinionated software build process for .NET solutions.
 .EXAMPLE
     PS C:\> ./build.ps1
-    Downloads any missing module dependencies (Endjin.RecommendedPractices.Build & InvokeBuild) and executes
+    Downloads any missing module dependencies (ZeroFailed & InvokeBuild) and executes
     the build process.
 .PARAMETER Tasks
     Optionally override the default task executed as the entry-point of the build.
@@ -27,14 +27,12 @@
     The logging verbosity.
 .PARAMETER Clean
     When true, the .NET solution will be cleaned and all output/intermediate folders deleted.
-.PARAMETER BuildModulePath
-    The path to import the Endjin.RecommendedPractices.Build module from. This is useful when
-    testing pre-release versions of the Endjin.RecommendedPractices.Build that are not yet
-    available in the PowerShell Gallery.
-.PARAMETER BuildModuleVersion
-    The version of the Endjin.RecommendedPractices.Build module to import. This is useful when
-    testing pre-release versions of the Endjin.RecommendedPractices.Build that are not yet
-    available in the PowerShell Gallery.
+.PARAMETER ZfModulePath
+    The path to import the ZeroFailed module from. This is useful when testing pre-release
+    versions of ZeroFailed that are not yet available in the PowerShell Gallery.
+.PARAMETER ZfModuleVersion
+    The version of the ZeroFailed module to import. This is useful when testing pre-release
+    versions of ZeroFailed that are not yet available in the PowerShell Gallery.
 .PARAMETER InvokeBuildModuleVersion
     The version of the InvokeBuild module to be used.
 #>
@@ -69,163 +67,55 @@ param (
     [switch] $Clean,
 
     [Parameter()]
-    [string] $BuildModulePath,
+    [string] $ZfModulePath,
 
     [Parameter()]
-    [version] $BuildModuleVersion = "1.5.12",
+    [string] $ZfModuleVersion = "1.0.5",
 
     [Parameter()]
-    [version] $InvokeBuildModuleVersion = "5.11.3"
+    [version] $InvokeBuildModuleVersion = "5.12.1"
 )
-
-$ErrorActionPreference = $ErrorActionPreference ? $ErrorActionPreference : 'Stop'
-$InformationPreference = 'Continue'
-
+$ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $PSCommandPath
 
 #region InvokeBuild setup
-if (!(Get-Module -ListAvailable InvokeBuild)) {
-    Install-Module InvokeBuild -RequiredVersion $InvokeBuildModuleVersion -Scope CurrentUser -Force -Repository PSGallery
-}
-Import-Module InvokeBuild
 # This handles calling the build engine when this file is run like a normal PowerShell script
 # (i.e. avoids the need to have another script to setup the InvokeBuild environment and issue the 'Invoke-Build' command )
 if ($MyInvocation.ScriptName -notlike '*Invoke-Build.ps1') {
+    Install-PSResource InvokeBuild -Version $InvokeBuildModuleVersion -Scope CurrentUser -TrustRepository -Verbose:$false | Out-Null
     try {
         Invoke-Build $Tasks $MyInvocation.MyCommand.Path @PSBoundParameters
     }
     catch {
-        $_.ScriptStackTrace
-        throw
+        Write-Host -f Yellow "`n`n***`n*** Build Failure Summary - check previous logs for more details`n***"
+        Write-Host -f Yellow $_.Exception.Message
+        Write-Host -f Yellow $_.ScriptStackTrace
+        exit 1
     }
     return
 }
 #endregion
 
-#region Import shared tasks and initialise build framework
-if (!($BuildModulePath)) {
-    if (!(Get-Module -ListAvailable Endjin.RecommendedPractices.Build | ? { $_.Version -eq $BuildModuleVersion })) {
-        Write-Information "Installing 'Endjin.RecommendedPractices.Build' module..."
-        Install-Module Endjin.RecommendedPractices.Build -RequiredVersion $BuildModuleVersion -Scope CurrentUser -Force -Repository PSGallery
-    }
-    $BuildModulePath = "Endjin.RecommendedPractices.Build"
+#region Initialise build framework
+$splat = @{ Force = $true; Verbose = $false}
+Import-Module Microsoft.PowerShell.PSResourceGet
+if (!($ZfModulePath)) {
+    Install-PSResource ZeroFailed -Version $ZfModuleVersion -Scope CurrentUser -TrustRepository | Out-Null
+    $ZfModulePath = "ZeroFailed"
+    $splat.Add("RequiredVersion", ($ZfModuleVersion -split '-')[0])
 }
 else {
-    Write-Information "BuildModulePath: $BuildModulePath"
+    Write-Host "ZfModulePath: $ZfModulePath"
 }
-Import-Module $BuildModulePath -RequiredVersion $BuildModuleVersion -Force
-
-# Load the build process & tasks
-. Endjin.RecommendedPractices.Build.tasks
+$splat.Add("Name", $ZfModulePath)
+# Ensure only 1 version of the module is loaded
+Get-Module ZeroFailed | Remove-Module
+Import-Module @splat
+$ver = "{0} {1}" -f (Get-Module ZeroFailed).Version, (Get-Module ZeroFailed).PrivateData.PsData.PreRelease
+Write-Host "Using ZeroFailed module version: $ver"
 #endregion
 
+$PSModuleAutoloadingPreference = 'none'
 
-#
-# Build process control options
-#
-$SkipInit = $false
-$SkipVersion = $false
-$SkipBuild = $false
-$CleanBuild = $Clean
-$SkipTest = $false
-$SkipTestReport = $false
-$SkipAnalysis = $false
-$SkipPackage = $false
-$SkipPublish = $false
-
-
-# NOTE: Install the 'Endjin.RecommendedPractices.Build' VS Code extension to get handy
-#       snippets for enabling & configuring features in this build script.
-#       Once installed <CTRL-ALT-J> will open the snippet picker and you can type 'build'
-#       to see the available snippets.
-
-#
-# Build process configuration
-#
-$SolutionToBuild = (Resolve-Path (Join-Path $here "Solutions/Corvus.Testing.AzureFunctions.ReqnRoll.sln")).Path
-$ProjectsToPublish = @(
-    # "Solutions/MySolution/MyWebSite/MyWebSite.csproj"
-)
-$NuSpecFilesToPackage = @(
-    # "Solutions/MySolution/MyProject/MyProject.nuspec"
-)
-
-#
-# Specify files to exclude from code coverage
-# This option is for excluding generated code
-# - Use file path or directory path with globbing (e.g dir1/*.cs)
-# - Use single or multiple paths (separated by comma) (e.g. **/dir1/class1.cs,**/dir2/*.cs,**/dir3/**/*.cs)
-#
-$ExcludeFilesFromCodeCoverage = ""
-
-# Bump version to one that supports installing on .NET 8.0
-$covenantVersion = "0.19.0"
-
-task Install-AzureFunctionsSDK {
-    
-    $existingVersion = ""
-    if ((Get-Command func -ErrorAction Ignore)) {
-        $existingVersion = exec { & func --version }
-    }
-
-    if (!$existingVersion -or $existingVersion -notlike "4.*") {
-        Write-Build White "Installing/updating Azure Functions Core Tools..."
-        if ($IsWindows) {
-            exec { & npm install -g azure-functions-core-tools@ --unsafe-perm true }
-        }
-        else {
-            Write-Build Yellow "NOTE: May require 'sudo' on Linux/MacOS"
-            exec { & sudo npm install -g azure-functions-core-tools@ --unsafe-perm true }
-        }
-    } 
-}
-
-# Synopsis: Build, Test and Package
-task . FullBuild
-
-
-# build extensibility tasks
-task RunFirst {}
-task PreInit {}
-task PostInit {}
-task PreVersion {}
-task PostVersion {}
-task PreBuild {}
-task PostBuild {}
-task PreTest Init, Install-AzureFunctionsSDK, {}
-task PostTest {}
-task PreTestReport {}
-task PostTestReport {}
-task PreAnalysis {}
-task PostAnalysis {}
-task PrePackage {}
-task PostPackage {}
-task PrePublish {}
-task PostPublish {}
-task RunLast {}
-
-# Override for debugging purposes
-task GitVersion -If {!$SkipGitVersion} {
-    
-    if ($GitVersion.Keys.Count -gt 0) {
-        Write-Build Cyan "Version details overridden by environment variable:`n$($GitVersion | ConvertTo-Json)"
-    }
-    else {
-        exec { dotnet --list-sdks }
-    
-        Install-DotNetTool -Name "GitVersion.Tool" -Version $GitVersionToolVersion
-        Write-Build Cyan "GitVersion Config: $GitVersionConfig"
-        exec { dotnet-gitversion /output json /nofetch /config $GitVersionConfig } | Tee-Object -Variable gitVersionOutputJson
-        
-        Write-Build Cyan "GitVersion Output:`n$gitVersionOutputJson"
-    
-        $env:GitVersionOutput = $gitVersionOutputJson
-        $script:GitVersion = $gitVersionOutputJson | ConvertFrom-Json -AsHashtable
-    
-        # Set the native GitVersion output as environment variables and build server variables
-        foreach ($var in $script:GitVersion.Keys) {
-            Set-Item -Path "env:GITVERSION_$var" -Value $GitVersion[$var]
-            Set-BuildServerVariable -Name "GitVersion.$var" -Value $GitVersion[$var]
-        }
-    }
-}
+# Load the build configuration
+. $here/.zf/config.ps1
