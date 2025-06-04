@@ -47,7 +47,7 @@ var logger = loggerFactory.CreateLogger<FunctionsController>();
 
 // Create and start a functions instance
 var controller = new FunctionsController(logger);
-await controller.StartFunctionsInstance(
+await controller.StartFunctionsInstanceAsync(
     path: "MyFunctionApp",     // Function project path
     port: 7071,                // Port to run on
     runtime: "net8.0"         // Runtime version

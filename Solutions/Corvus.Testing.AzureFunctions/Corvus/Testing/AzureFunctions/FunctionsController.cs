@@ -24,7 +24,7 @@ namespace Corvus.Testing.AzureFunctions
     /// <remarks>
     /// <para>
     /// This class supports a limited degree of thread safety: you can have multiple calls to
-    /// <see cref="StartFunctionsInstance(string, int, string, string, FunctionConfiguration?)"/> in progress simultaneously for a single
+    /// <see cref="StartFunctionsInstanceAsync"/> in progress simultaneously for a single
     /// instance of this class, but <see cref="TeardownFunctionsAsync"/> must not be called concurrently
     /// with any other calls into this class. The intention is to enable tests to spin up multiple
     /// functions simultaneously. This is useful because function startup can be the dominant
@@ -74,7 +74,7 @@ namespace Corvus.Testing.AzureFunctions
         /// <param name="configuration">A <see cref="FunctionConfiguration"/> instance, for conveying
         /// configuration values via environment variables to the function host process.</param>
         /// <returns>A task that completes once the function instance has started.</returns>
-        public async Task StartFunctionsInstance(string path, int port, string runtime, string provider = "csharp", FunctionConfiguration? configuration = null)
+        public async Task StartFunctionsInstanceAsync(string path, int port, string runtime, string provider = "csharp", FunctionConfiguration? configuration = null)
         {
             this.functionLogScope = this.logger.BeginScope(this);
 

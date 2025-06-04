@@ -25,7 +25,7 @@ This library provides two main packages:
 
 - ✅ Programmatically start and stop Azure Functions instances
 - ✅ Support for both In-Process and Isolated Azure Functions models
-- ✅ ReqnRoll/SpecFlow integration with step definitions and hooks
+- ✅ ReqnRoll integration with step definitions and hooks
 - ✅ Port management and conflict resolution
 - ✅ Environment variable configuration
 - ✅ Process output capture and logging
@@ -44,8 +44,8 @@ The [`FunctionsController`](Solutions/Corvus.Testing.AzureFunctions/Corvus/Testi
 public sealed class FunctionsController
 {
     public FunctionsController(ILogger logger)
-    
-    public async Task StartFunctionsInstance(string path, int port, string runtime, 
+
+    public async Task StartFunctionsInstanceAsync(string path, int port, string runtime, 
         string provider = "csharp", FunctionConfiguration? configuration = null)
     
     public async Task TeardownFunctionsAsync(CancellationToken cancellationToken = default)
@@ -144,7 +144,7 @@ var controller = new FunctionsController(logger);
 2. **Start a Functions Instance:**
 
 ```csharp
-await controller.StartFunctionsInstance(
+await controller.StartFunctionsInstanceAsync(
     path: "MyFunctionApp",           // Function project path
     port: 7071,                      // Port to run on
     runtime: "net8.0"               // Runtime version
@@ -171,8 +171,8 @@ public async Task TestMyFunction()
     
     try
     {
-        await controller.StartFunctionsInstance("MyFunctionApp", 7071, "net8.0");
-        
+        await controller.StartFunctionsInstanceAsync("MyFunctionApp", 7071, "net8.0");
+
         // Perform your tests
         using var client = new HttpClient();
         var response = await client.GetAsync("http://localhost:7071/api/MyFunction");
@@ -198,7 +198,7 @@ public static class FunctionHooks
     public static Task StartFunctions(FeatureContext featureContext)
     {
         var controller = FunctionsBindings.GetFunctionsController(featureContext);
-        return controller.StartFunctionsInstance("MyFunctionApp", 7071, "net8.0");
+        return controller.StartFunctionsInstanceAsync("MyFunctionApp", 7071, "net8.0");
     }
 
     [AfterFeature("myFeature")]
@@ -219,9 +219,9 @@ var controller = new FunctionsController(logger);
 
 // Start multiple functions on different ports
 await Task.WhenAll(
-    controller.StartFunctionsInstance("ApiGateway", 7071, "net8.0"),
-    controller.StartFunctionsInstance("OrderService", 7072, "net8.0"),
-    controller.StartFunctionsInstance("PaymentService", 7073, "net8.0")
+    controller.StartFunctionsInstanceAsync("ApiGateway", 7071, "net8.0"),
+    controller.StartFunctionsInstanceAsync("OrderService", 7072, "net8.0"),
+    controller.StartFunctionsInstanceAsync("PaymentService", 7073, "net8.0")
 );
 
 // All functions are now running and ready for integration testing
@@ -239,7 +239,7 @@ config.EnvironmentVariables["CosmosDB:ConnectionString"] = "AccountEndpoint=..."
 config.EnvironmentVariables["ServiceBus:ConnectionString"] = "Endpoint=...";
 config.EnvironmentVariables["ApplicationInsights:InstrumentationKey"] = "test-key";
 
-await controller.StartFunctionsInstance("MyApp", 7071, "net8.0", configuration: config);
+await controller.StartFunctionsInstanceAsync("MyApp", 7071, "net8.0", configuration: config);
 ```
 
 ### ReqnRoll Configuration
@@ -280,8 +280,8 @@ public static async Task<IActionResult> Run(
 public async Task HelloFunction_ReturnsGreeting()
 {
     var controller = new FunctionsController(logger);
-    await controller.StartFunctionsInstance("HelloApp", 7071, "net8.0");
-    
+    await controller.StartFunctionsInstanceAsync("HelloApp", 7071, "net8.0");
+
     try
     {
         using var client = new HttpClient();
@@ -368,7 +368,7 @@ public static class ConfiguredFunctionHooks
         config.EnvironmentVariables["ExternalApi:BaseUrl"] = "https://test-api.example.com";
         config.EnvironmentVariables["Feature:EnableNewFeature"] = "true";
 
-        return controller.StartFunctionsInstance("ConfigurableApp", 7074, "net8.0", configuration: config);
+        return controller.StartFunctionsInstanceAsync("ConfigurableApp", 7074, "net8.0", configuration: config);
     }
 }
 ```
