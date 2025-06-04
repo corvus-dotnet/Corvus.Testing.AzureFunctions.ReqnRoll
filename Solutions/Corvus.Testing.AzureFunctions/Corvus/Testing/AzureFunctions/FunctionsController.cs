@@ -192,6 +192,10 @@ namespace Corvus.Testing.AzureFunctions
             await Task.WhenAll(shutdownTasks).ConfigureAwait(false);
 
             this.logger.LogAllAndClear(outputHandlers);
+
+            // Also attempt to kill any other func.exe processes that might have been orphaned.
+            await this.KillLingeringFuncProcessesAsync(cancellationToken).ConfigureAwait(false);
+
             this.functionLogScope?.Dispose();
 
             if (exceptions.Count > 0)
@@ -529,7 +533,7 @@ namespace Corvus.Testing.AzureFunctions
         /// Kills any lingering func.exe processes that might be left over from previous failed tests.
         /// </summary>
         /// <returns>A task that completes when cleanup is finished.</returns>
-        private async Task KillLingeringFuncProcessesAsync()
+        private async Task KillLingeringFuncProcessesAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -550,7 +554,7 @@ namespace Corvus.Testing.AzureFunctions
                         this.logger.LogDebug("Killing lingering func.exe process {ProcessId}", pid);
 
                         // Use our robust process killing logic
-                        await KillProcessAndChildrenAsync(pid, this.logger).ConfigureAwait(false);
+                        await KillProcessAndChildrenAsync(pid, this.logger, cancellationToken).ConfigureAwait(false);
 
                         this.logger.LogDebug("Successfully killed lingering func.exe process {ProcessId}", pid);
                     }
@@ -567,7 +571,7 @@ namespace Corvus.Testing.AzureFunctions
                 await Task.WhenAll(killTasks).ConfigureAwait(false);
 
                 // Give the OS a moment to clean up
-                await Task.Delay(500).ConfigureAwait(false);
+                await Task.Delay(500, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
