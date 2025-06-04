@@ -5,14 +5,15 @@
 namespace Corvus.Testing.AzureFunctions.Demo.InProcess;
 
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 /// <summary>
 /// Sample functions for the demo to invoke.
@@ -48,13 +49,26 @@ public class SampleFunction
         string name = req.Query["name"];
 
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync().ConfigureAwait(false);
-        dynamic data = JsonConvert.DeserializeObject(requestBody)!;
-        name ??= data?.name;
+        if (!string.IsNullOrEmpty(requestBody))
+        {
+            try
+            {
+                using JsonDocument document = JsonDocument.Parse(requestBody);
+                if (document.RootElement.TryGetProperty("name", out JsonElement nameElement) && nameElement.ValueKind == JsonValueKind.String)
+                {
+                    name ??= nameElement.GetString();
+                }
+            }
+            catch (JsonException)
+            {
+                // Silently handle JSON parsing errors
+            }
+        }
 
         string result = this.message.Replace("{name}", name);
 
         return name != null
-            ? (ActionResult)new OkObjectResult(result)
+            ? new OkObjectResult(result)
             : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
     }
 }
