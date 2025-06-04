@@ -41,7 +41,7 @@ permissions:
 jobs:
   prepareConfig:
     name: Prepare Configuration
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     outputs:
       RESOLVED_ENV_VARS: ${{ steps.prepareEnvVarsAndSecrets.outputs.environmentVariablesYamlBase64 }}
       RESOLVED_SECRETS: ${{ steps.prepareEnvVarsAndSecrets.outputs.secretsYamlBase64 }}
