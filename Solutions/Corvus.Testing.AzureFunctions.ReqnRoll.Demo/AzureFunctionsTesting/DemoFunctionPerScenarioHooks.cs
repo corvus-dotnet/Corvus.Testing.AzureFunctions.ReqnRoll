@@ -58,10 +58,10 @@ namespace Corvus.Testing.ReqnRoll.Demo.AzureFunctionsTesting
             "usingIsolatedDemoFunctionPerScenario",
             "usingInProcessDemoFunctionPerScenarioWithAdditionalConfiguration",
             "usingIsolatedDemoFunctionPerScenarioWithAdditionalConfiguration")]
-        public static void StopFunction(ScenarioContext scenarioContext)
+        public static async Task StopFunction(ScenarioContext scenarioContext)
         {
             FunctionsController functionsController = FunctionsBindings.GetFunctionsController(scenarioContext);
-            functionsController.TeardownFunctions();
+            await functionsController.TeardownFunctionsAsync().ConfigureAwait(false);
         }
     }
 }

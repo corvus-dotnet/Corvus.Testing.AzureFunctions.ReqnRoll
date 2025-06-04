@@ -9,11 +9,8 @@ namespace Corvus.Testing.AzureFunctions
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
-    using System.Management;
     using System.Net.Http;
-    using System.Net.NetworkInformation;
     using System.Net.Sockets;
-    using System.Runtime.InteropServices;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -28,7 +25,7 @@ namespace Corvus.Testing.AzureFunctions
     /// <para>
     /// This class supports a limited degree of thread safety: you can have multiple calls to
     /// <see cref="StartFunctionsInstance(string, int, string, string, FunctionConfiguration?)"/> in progress simultaneously for a single
-    /// instance of this class, but <see cref="TeardownFunctions"/> must not be called concurrently
+    /// instance of this class, but <see cref="TeardownFunctionsAsync"/> must not be called concurrently
     /// with any other calls into this class. The intention is to enable tests to spin up multiple
     /// functions simultaneously. This is useful because function startup can be the dominant
     /// factor in test execution time for integration tests.
@@ -144,134 +141,157 @@ namespace Corvus.Testing.AzureFunctions
         }
 
         /// <summary>
-        /// Tear down the running functions instances, forcibly killing the process where required.
+        /// Tear down the running functions instances asynchronously, forcibly killing the process where required.
         /// </summary>
+        /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+        /// <returns>A task that completes when all function instances have been shut down.</returns>
         /// <remarks>
         /// <para>
-        /// This is a best-effort approach, because in some environments (e.g., on some build
-        /// agents) we get Access Denied errors when trying to kill the host forcibly. We will
-        /// retry up to three times when that happens because sometimes race conditions can cause
-        /// spurious access denied failures. But we will eventually give up. We don't throw an
-        /// exception in this case because there may be situations in which tests can proceed,
-        /// but in most cases this is likely to result in the next test failing, because it will
-        /// try to run the functions host again with the same port number settings, and that will
-        /// fail because the port is already in use by the process we were unable to terminate.
+        /// This method uses a graceful shutdown approach followed by force termination if needed.
+        /// It attempts to shut down processes gracefully first, then uses cross-platform process
+        /// tree termination with proper retry logic for access denied scenarios.
         /// </para>
         /// </remarks>
-        public void TeardownFunctions()
+        public async Task TeardownFunctionsAsync(CancellationToken cancellationToken = default)
         {
-            List<Exception> aggregate = [];
-            foreach (FunctionOutputBufferHandler outputHandler in this.output)
+            List<Exception> exceptions = [];
+
+            // Make a copy of the output list to avoid modification during iteration
+            List<FunctionOutputBufferHandler> outputHandlers;
+            lock (this.sync)
+            {
+                outputHandlers = new List<FunctionOutputBufferHandler>(this.output);
+                this.output.Clear(); // Clear the original list to prevent double-teardown
+            }
+
+            if (outputHandlers.Count == 0)
+            {
+                this.logger.LogDebug("No function instances to tear down");
+                this.functionLogScope?.Dispose();
+                return;
+            }
+
+            this.logger.LogDebug("Tearing down {Count} function instance(s)", outputHandlers.Count);
+
+            // Shutdown all processes in parallel
+            IEnumerable<Task> shutdownTasks = outputHandlers.Select(async outputHandler =>
             {
                 try
                 {
-                    KillProcessAndChildren(outputHandler.Process.Id);
-
-                    if (!outputHandler.Process.WaitForExit(10000))
+                    await this.ShutdownFunctionHostAsync(outputHandler, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    lock (exceptions)
                     {
-                        Console.Error.WriteLine("Unable to shut down functions host");
+                        exceptions.Add(ex);
                     }
                 }
-                catch (Exception e)
-                {
-                    aggregate.Add(e);
-                }
-            }
+            });
 
-            this.logger.LogAllAndClear(this.output);
+            await Task.WhenAll(shutdownTasks).ConfigureAwait(false);
+
+            this.logger.LogAllAndClear(outputHandlers);
             this.functionLogScope?.Dispose();
 
-            if (aggregate.Count > 0)
+            if (exceptions.Count > 0)
             {
-                throw new AggregateException(aggregate);
+                throw new AggregateException(exceptions);
             }
         }
 
         /// <summary>
-        /// Kill a process, and all of its children, grandchildren, etc.
+        /// Kill a process and all of its children using cross-platform process tree termination.
         /// </summary>
         /// <param name="pid">Process ID.</param>
-        private static void KillProcessAndChildren(int pid)
+        /// <param name="logger">Logger for diagnostic messages.</param>
+        /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+        /// <returns>A task that completes when the process tree has been terminated.</returns>
+        private static async Task KillProcessAndChildrenAsync(int pid, ILogger logger, CancellationToken cancellationToken = default)
         {
-            // Cannot close 'system idle process'.
             if (pid == 0)
             {
-                return;
+                return; // Cannot close system idle process
             }
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            const int maxRetries = 3;
+            const int retryDelayMs = 100;
+
+            for (int attempt = 0; attempt < maxRetries; attempt++)
             {
-                using (var searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + pid))
-                {
-                    foreach (ManagementObject mo in searcher.Get().Cast<ManagementObject>())
-                    {
-                        KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"]));
-                    }
-                }
-            }
-
-            bool failedDueToAccessDenied;
-            int accessDenyRetryCount = 0;
-            const int MaxAccessDeniedRetries = 3;
-
-            do
-            {
-                failedDueToAccessDenied = false;
-
-                Process proc;
                 try
                 {
-                    proc = Process.GetProcessById(pid);
+                    var process = Process.GetProcessById(pid);
+
+                    // Use cross-platform process tree termination
+                    process.Kill(entireProcessTree: true);
+
+                    if (await WaitForProcessExitAsync(process, TimeSpan.FromSeconds(10), cancellationToken).ConfigureAwait(false))
+                    {
+                        logger.LogDebug("Successfully killed process tree for PID {ProcessId}", pid);
+                        return; // Success
+                    }
+
+                    logger.LogWarning("Process {ProcessId} did not exit within timeout", pid);
                 }
                 catch (ArgumentException)
                 {
-                    // Process already exited.
+                    // Process already exited
+                    logger.LogDebug("Process {ProcessId} already exited", pid);
                     return;
                 }
+                catch (InvalidOperationException)
+                {
+                    // Process has already exited
+                    logger.LogDebug("Process {ProcessId} has already exited", pid);
+                    return;
+                }
+                catch (Win32Exception ex) when (ex.ErrorCode == E_ACCESSDENIED)
+                {
+                    logger.LogWarning("Access denied killing process {ProcessId}, attempt {Attempt}/{MaxRetries}", pid, attempt + 1, maxRetries);
 
-                try
-                {
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    if (attempt < maxRetries - 1)
                     {
-                        proc.Kill();
+                        await Task.Delay(retryDelayMs * (attempt + 1), cancellationToken).ConfigureAwait(false);
+                        continue;
                     }
-                    else
-                    {
-                        proc.Kill(entireProcessTree: true);
-                    }
-                }
-                catch (AggregateException ex)
-                {
-                    Console.WriteLine("Caught an AggregateException: " + ex.Message);
-                    foreach (var innerEx in ex.InnerExceptions)
-                    {
-                        if (innerEx is Win32Exception win32Ex)
-                        {
-                            if (win32Ex.ErrorCode == E_ACCESSDENIED)
-                            {
-                                Console.Error.WriteLine($"Access denied when trying to kill process id {pid}, '{proc.ProcessName}'");
-                                failedDueToAccessDenied = true;
-                            }
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-                catch (Win32Exception x)
-                    when (x.ErrorCode == E_ACCESSDENIED)
-                {
-                    Console.Error.WriteLine($"Access denied when trying to kill process id {pid}, '{proc.ProcessName}'");
-                    failedDueToAccessDenied = true;
-                }
 
-                if (failedDueToAccessDenied && accessDenyRetryCount < MaxAccessDeniedRetries)
+                    logger.LogError("Failed to kill process {ProcessId} after {MaxRetries} attempts due to access denied", pid, maxRetries);
+                    throw;
+                }
+                catch (Exception ex)
                 {
-                    Thread.Sleep(100);
+                    logger.LogError(ex, "Unexpected error killing process {ProcessId}", pid);
+                    throw;
                 }
             }
-            while (failedDueToAccessDenied && accessDenyRetryCount++ < MaxAccessDeniedRetries);
+        }
+
+        /// <summary>
+        /// Waits for a process to exit with proper async handling and timeout.
+        /// </summary>
+        /// <param name="process">The process to wait for.</param>
+        /// <param name="timeout">The maximum time to wait.</param>
+        /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+        /// <returns>A task that returns true if the process exited within the timeout, false otherwise.</returns>
+        private static async Task<bool> WaitForProcessExitAsync(Process process, TimeSpan timeout, CancellationToken cancellationToken = default)
+        {
+            using var timeoutCts = new CancellationTokenSource(timeout);
+            using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
+
+            try
+            {
+                while (!process.HasExited && !combinedCts.Token.IsCancellationRequested)
+                {
+                    await Task.Delay(50, combinedCts.Token).ConfigureAwait(false);
+                }
+
+                return process.HasExited;
+            }
+            catch (OperationCanceledException)
+            {
+                return process.HasExited;
+            }
         }
 
         /// <summary>
@@ -342,6 +362,120 @@ namespace Corvus.Testing.AzureFunctions
         }
 
         /// <summary>
+        /// Shuts down a function host process gracefully, then forcibly if needed.
+        /// </summary>
+        /// <param name="outputHandler">The output handler for the process to shut down.</param>
+        /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+        /// <returns>A task that completes when the process has been shut down.</returns>
+        private async Task ShutdownFunctionHostAsync(FunctionOutputBufferHandler outputHandler, CancellationToken cancellationToken)
+        {
+            const int gracefulTimeoutSeconds = 5;
+            const int forceTimeoutSeconds = 10;
+
+            try
+            {
+                Process process = outputHandler.Process;
+
+                // Check if process has already exited
+                if (process.HasExited)
+                {
+                    this.logger.LogDebug("Process {ProcessId} has already exited", process.Id);
+                    return;
+                }
+
+                // Step 1: Try graceful shutdown
+                this.logger.LogDebug("Attempting graceful shutdown of process {ProcessId}", process.Id);
+                if (await this.TryGracefulShutdownAsync(process, TimeSpan.FromSeconds(gracefulTimeoutSeconds), cancellationToken).ConfigureAwait(false))
+                {
+                    this.logger.LogDebug("Process {ProcessId} shut down gracefully", process.Id);
+                    return;
+                }
+
+                // Step 2: Force kill with process tree
+                this.logger.LogDebug("Graceful shutdown failed, force killing process tree {ProcessId}", process.Id);
+                await KillProcessAndChildrenAsync(process.Id, this.logger, cancellationToken).ConfigureAwait(false);
+
+                // Step 3: Final verification
+                if (!await WaitForProcessExitAsync(process, TimeSpan.FromSeconds(forceTimeoutSeconds), cancellationToken).ConfigureAwait(false))
+                {
+                    this.logger.LogError("Unable to shut down function host process {ProcessId}", process.Id);
+                    throw new InvalidOperationException($"Function host process {process.Id} could not be terminated");
+                }
+
+                this.logger.LogDebug("Process {ProcessId} terminated successfully", process.Id);
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("has exited"))
+            {
+                // Process has already exited, which is what we want
+                this.logger.LogDebug("Process has already exited during shutdown attempt");
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Failed to shutdown function host");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to gracefully shut down a process.
+        /// </summary>
+        /// <param name="process">The process to shut down.</param>
+        /// <param name="timeout">The timeout for the graceful shutdown attempt.</param>
+        /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+        /// <returns>A task that returns true if the process was shut down gracefully, false otherwise.</returns>
+        private async Task<bool> TryGracefulShutdownAsync(Process process, TimeSpan timeout, CancellationToken cancellationToken)
+        {
+            try
+            {
+                // Check if already exited
+                if (process.HasExited)
+                {
+                    return true;
+                }
+
+                // Try to close the main window first (if it has one)
+                try
+                {
+                    if (process.MainWindowHandle != IntPtr.Zero)
+                    {
+                        process.CloseMainWindow();
+                        if (await WaitForProcessExitAsync(process, TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    // Process may have exited between checks
+                    return process.HasExited;
+                }
+
+                // Try sending graceful kill signal
+                if (!process.HasExited)
+                {
+                    try
+                    {
+                        process.Kill(entireProcessTree: false); // Graceful kill first
+                        return await WaitForProcessExitAsync(process, timeout, cancellationToken).ConfigureAwait(false);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // Process may have exited
+                        return process.HasExited;
+                    }
+                }
+
+                return process.HasExited;
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogDebug(ex, "Graceful shutdown attempt failed for process {ProcessId}", process.Id);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Checks that a TCP port is not already in use by some other process.
         /// </summary>
         /// <param name="port">The port to check.</param>
@@ -363,6 +497,13 @@ namespace Corvus.Testing.AzureFunctions
         {
             for (int tries = 0; PortFinder.IsSomethingAlreadyListeningOn(port); ++tries)
             {
+                // After 1.5 seconds, try to cleanup lingering processes
+                if (tries == 15)
+                {
+                    this.logger.LogWarning("Port {Port} still in use after {Tries} attempts, trying to kill lingering func.exe processes", port, tries);
+                    await this.KillLingeringFuncProcessesAsync().ConfigureAwait(false);
+                }
+
                 await Task.Delay(100).ConfigureAwait(false);
                 if (tries > 30)
                 {
@@ -381,6 +522,56 @@ namespace Corvus.Testing.AzureFunctions
                     this.logger.LogWarning("Found a process listening on {Port}. Is this a debug instance?", port);
                     throw new FunctionStartupException($"Found a process listening on {port}. Is this a debug instance?");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Kills any lingering func.exe processes that might be left over from previous failed tests.
+        /// </summary>
+        /// <returns>A task that completes when cleanup is finished.</returns>
+        private async Task KillLingeringFuncProcessesAsync()
+        {
+            try
+            {
+                Process[] funcProcesses = Process.GetProcessesByName("func");
+                if (funcProcesses.Length == 0)
+                {
+                    this.logger.LogDebug("No lingering func.exe processes found");
+                    return;
+                }
+
+                this.logger.LogInformation("Found {Count} lingering func.exe process(es), attempting to clean up", funcProcesses.Length);
+
+                IEnumerable<Task> killTasks = funcProcesses.Select(async process =>
+                {
+                    try
+                    {
+                        int pid = process.Id;
+                        this.logger.LogDebug("Killing lingering func.exe process {ProcessId}", pid);
+
+                        // Use our robust process killing logic
+                        await KillProcessAndChildrenAsync(pid, this.logger).ConfigureAwait(false);
+
+                        this.logger.LogDebug("Successfully killed lingering func.exe process {ProcessId}", pid);
+                    }
+                    catch (Exception ex)
+                    {
+                        this.logger.LogWarning(ex, "Failed to kill lingering func.exe process {ProcessId}", process.Id);
+                    }
+                    finally
+                    {
+                        process.Dispose();
+                    }
+                });
+
+                await Task.WhenAll(killTasks).ConfigureAwait(false);
+
+                // Give the OS a moment to clean up
+                await Task.Delay(500).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogWarning(ex, "Error while cleaning up lingering func.exe processes");
             }
         }
 

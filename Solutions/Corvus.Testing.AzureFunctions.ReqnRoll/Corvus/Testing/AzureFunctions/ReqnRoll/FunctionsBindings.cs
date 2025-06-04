@@ -106,10 +106,11 @@ namespace Corvus.Testing.AzureFunctions.ReqnRoll
         /// <summary>
         ///     Tear down the running functions instances for the scenario.
         /// </summary>
+        /// <returns>Returns a Task for the operation.</returns>
         [AfterScenario]
-        public void TeardownFunctionsAfterScenario()
+        public async Task TeardownFunctionsAfterScenario()
         {
-            this.scenarioContext.RunAndStoreExceptions(GetFunctionsController(this.scenarioContext).TeardownFunctions);
+            await GetFunctionsController(this.scenarioContext).TeardownFunctionsAsync().ConfigureAwait(false);
         }
     }
 }
