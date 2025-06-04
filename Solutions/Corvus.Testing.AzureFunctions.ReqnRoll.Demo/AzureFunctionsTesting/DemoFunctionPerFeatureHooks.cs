@@ -22,9 +22,9 @@ namespace Corvus.Testing.ReqnRoll.Demo.AzureFunctionsTesting
             FunctionConfiguration functionConfiguration = FunctionsBindings.GetFunctionConfiguration(featureContext);
 
             return functionsController.StartFunctionsInstance(
-                "Corvus.Testing.AzureFunctions.DemoFunction.InProcess",
+                "Corvus.Testing.AzureFunctions.Demo.InProcess",
                 7075,
-                "net6.0",
+                "net8.0",
                 configuration: functionConfiguration);
         }
 
@@ -35,7 +35,7 @@ namespace Corvus.Testing.ReqnRoll.Demo.AzureFunctionsTesting
             FunctionConfiguration functionConfiguration = FunctionsBindings.GetFunctionConfiguration(featureContext);
 
             return functionsController.StartFunctionsInstance(
-                "Corvus.Testing.AzureFunctions.DemoFunctions.Isolated",
+                "Corvus.Testing.AzureFunctions.Demo.Isolated",
                 7075,
                 "net8.0",
                 configuration: functionConfiguration);

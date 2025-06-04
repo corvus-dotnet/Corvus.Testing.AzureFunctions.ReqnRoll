@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "Corvus.Testing.AzureFunctions.DemoFunction": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7184",
-      "launchBrowser": false
-    }
-  }
-}

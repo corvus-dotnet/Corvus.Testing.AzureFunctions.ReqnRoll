@@ -20,9 +20,9 @@ namespace Corvus.Testing.ReqnRoll.Demo.AzureFunctionsTesting
             FunctionConfiguration functionConfiguration = FunctionsBindings.GetFunctionConfiguration(scenarioContext);
 
             return functionsController.StartFunctionsInstance(
-                "Corvus.Testing.AzureFunctions.DemoFunction.InProcess",
+                "Corvus.Testing.AzureFunctions.DemoFunctions.InProcess",
                 7075,
-                "net6.0",
+                "net8.0",
                 configuration: functionConfiguration);
         }
 

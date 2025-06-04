@@ -1,8 +1,7 @@
-namespace Corvus.Testing.AzureFunctions.DemoFunctions.Isolated
+namespace Corvus.Testing.AzureFunctions.Demo.Isolated
 {
     using System.Net;
     using System.Text.Json;
-
     using Microsoft.Azure.Functions.Worker;
     using Microsoft.Azure.Functions.Worker.Http;
     using Microsoft.Extensions.Configuration;
@@ -13,17 +12,14 @@ namespace Corvus.Testing.AzureFunctions.DemoFunctions.Isolated
         private readonly string message;
         private readonly ILogger log;
 
-        public SampleFunction(
-            IConfiguration configuration,
-            ILoggerFactory loggerFactory)
+        public SampleFunction(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             this.message = configuration["ResponseMessage"]!;
             this.log = loggerFactory.CreateLogger<SampleFunction>();
         }
 
         [Function("SampleFunction-Get")]
-        public async Task<HttpResponseData> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "{*path}")] HttpRequestData req)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "{*path}")] HttpRequestData req)
         {
             // Note: the demo function has the log level set to "None" in host.json. This is intentional, to show that
             // our code in Corvus.Testing.AzureFunctions is able to detect that the function has started correctly
@@ -35,8 +31,7 @@ namespace Corvus.Testing.AzureFunctions.DemoFunctions.Isolated
             try
             {
                 using JsonDocument doc = await JsonDocument.ParseAsync(req.Body);
-                if (doc.RootElement.TryGetProperty("name", out JsonElement nameElement)
-                    && nameElement.ValueKind == JsonValueKind.String)
+                if (doc.RootElement.TryGetProperty("name", out JsonElement nameElement) && nameElement.ValueKind == JsonValueKind.String)
                 {
                     name ??= nameElement.GetString();
                 }
@@ -50,14 +45,14 @@ namespace Corvus.Testing.AzureFunctions.DemoFunctions.Isolated
             {
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-                response.WriteString("Please pass a name on the query string or in the request body");
+                await response.WriteStringAsync("Please pass a name on the query string or in the request body");
             }
             else
             {
                 response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
 
-                response.WriteString(this.message.Replace("{name}", name));
+                await response.WriteStringAsync(this.message.Replace("{name}", name));
 
             }
 

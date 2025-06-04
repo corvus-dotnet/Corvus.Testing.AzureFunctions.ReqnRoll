@@ -84,8 +84,8 @@ namespace AzureFunctionsTesting
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("A Get request including a name in the querystring is successful")]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunction.InProcess", "net6.0", null)]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunctions.Isolated", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
         public async System.Threading.Tasks.Task AGetRequestIncludingANameInTheQuerystringIsSuccessful(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -122,8 +122,8 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("A Get request without providing a name in the querystring fails.")]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunction.InProcess", "net6.0", null)]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunctions.Isolated", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
         public async System.Threading.Tasks.Task AGetRequestWithoutProvidingANameInTheQuerystringFails_(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -157,8 +157,8 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("A Post request including a name in the querystring is successful")]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunction.InProcess", "net6.0", null)]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunctions.Isolated", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
         public async System.Threading.Tasks.Task APostRequestIncludingANameInTheQuerystringIsSuccessful(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -195,8 +195,8 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("A Post request including a name in the request body is successful")]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunction.InProcess", "net6.0", null)]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunctions.Isolated", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
         public async System.Threading.Tasks.Task APostRequestIncludingANameInTheRequestBodyIsSuccessful(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -240,8 +240,8 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("A Post request including names in the querystring and request body uses the name " +
             "in the querystring")]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunction.InProcess", "net6.0", null)]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunctions.Isolated", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
         public async System.Threading.Tasks.Task APostRequestIncludingNamesInTheQuerystringAndRequestBodyUsesTheNameInTheQuerystring(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -286,8 +286,8 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("A Post request without a querystring or request body fails")]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunction.InProcess", "net6.0", null)]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunctions.Isolated", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
         public async System.Threading.Tasks.Task APostRequestWithoutAQuerystringOrRequestBodyFails(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
@@ -321,8 +321,8 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Supplying an alternative greeting via configuration")]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunction.InProcess", "net6.0", null)]
-        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.DemoFunctions.Isolated", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
+        [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
         public async System.Threading.Tasks.Task SupplyingAnAlternativeGreetingViaConfiguration(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

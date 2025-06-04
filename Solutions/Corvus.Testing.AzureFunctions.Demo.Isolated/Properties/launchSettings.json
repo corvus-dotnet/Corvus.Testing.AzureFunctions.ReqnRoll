@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Isolated": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7075",
+      "launchBrowser": false
+    }
+  }
+}

@@ -4,14 +4,13 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
     <IsTestProject>false</IsTestProject>
     <TestProject>false</TestProject>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>

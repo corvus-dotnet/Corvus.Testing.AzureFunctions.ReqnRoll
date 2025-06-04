@@ -21,15 +21,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{C07A8D88-6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Corvus.Testing.AzureFunctions", "Corvus.Testing.AzureFunctions\Corvus.Testing.AzureFunctions.csproj", "{3F86ECD4-674C-4026-9DC6-342FB43A84D6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Corvus.Testing.AzureFunctions.Demo.InProcess", "Corvus.Testing.AzureFunctions.Demo.InProcess\Corvus.Testing.AzureFunctions.Demo.InProcess.csproj", "{A82AEA52-81AA-4AAA-BEFE-8E28013E2A7A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Corvus.Testing.AzureFunctions.Demo.Isolated", "Corvus.Testing.AzureFunctions.Demo.Isolated\Corvus.Testing.AzureFunctions.Demo.Isolated.csproj", "{492124E6-F290-4C0E-AF91-C7E26BF83B2B}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Corvus.Testing.AzureFunctions.ReqnRoll.Demo", "Corvus.Testing.AzureFunctions.ReqnRoll.Demo\Corvus.Testing.AzureFunctions.ReqnRoll.Demo.csproj", "{4F726825-01C5-4BCF-B82B-E26C14565EEF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Corvus.Testing.AzureFunctions.ReqnRoll", "Corvus.Testing.AzureFunctions.ReqnRoll\Corvus.Testing.AzureFunctions.ReqnRoll.csproj", "{A3C7BB3D-5C1B-4A59-9D1F-CC13BAEFCF45}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Corvus.Testing.AzureFunctions.DemoFunctions.InProcess", "Corvus.Testing.AzureFunctions.DemoFunction.InProcess\Corvus.Testing.AzureFunctions.DemoFunctions.InProcess.csproj", "{A82AEA52-81AA-4AAA-BEFE-8E28013E2A7A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Corvus.Testing.AzureFunctions.ReqnRoll.NUnit", "Corvus.Testing.AzureFunctions.ReqnRoll.NUnit\Corvus.Testing.AzureFunctions.ReqnRoll.NUnit.csproj", "{DC1B7B5A-8417-4696-B061-9C03EE933C02}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Corvus.Testing.AzureFunctions.DemoFunctions.Isolated", "Corvus.Testing.AzureFunctions.DemoFunctions.Isolated\Corvus.Testing.AzureFunctions.DemoFunctions.Isolated.csproj", "{492124E6-F290-4C0E-AF91-C7E26BF83B2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

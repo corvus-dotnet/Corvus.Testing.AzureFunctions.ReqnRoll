@@ -85,7 +85,7 @@ namespace Corvus.Testing.AzureFunctions.ReqnRoll
         public Task StartAFunctionsInstance(string path, int port)
         {
             return GetFunctionsController(this.scenarioContext)
-                  .StartFunctionsInstance(path, port, "net6.0");
+                  .StartFunctionsInstance(path, port, "net8.0");
         }
 
         /// <summary>
