@@ -24,7 +24,7 @@ namespace Corvus.Testing.AzureFunctions
         /// public async Task ReadFunctionConfiguration()
         /// {
         ///     string functionProjectPath = FunctionProject.ResolvePath(
-        ///         "Solutions/Corvus.Testing.AzureFunctions.DemoFunctions.InProcess",
+        ///         "Solutions/Corvus.Testing.AzureFunctions.Demo.InProcess",
         ///         "net8.0");
         ///
         ///     string projectSettingsFile = Path.Combine(functionProjectPath, "local.settings.json");
