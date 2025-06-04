@@ -36,6 +36,8 @@ $SolutionToBuild = (Resolve-Path (Join-Path $here "Solutions/Corvus.Testing.Azur
 $ProjectsToPublish = @()
 $NuSpecFilesToPackage = @()
 $NugetPublishSource = property ZF_NUGET_PUBLISH_SOURCE "$here/_local-nuget-feed"
+$IncludeAssembliesInCodeCoverage = "Corvus.Testing.AzureFunctions*"
+$ExcludeAssembliesInCodeCoverage = "Corvus.Testing.AzureFunctions*Demo*"
 
 
 # Customise the build process
