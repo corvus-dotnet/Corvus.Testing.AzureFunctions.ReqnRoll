@@ -17,7 +17,7 @@ namespace Corvus.Testing.AzureFunctions.DemoFunctions.Isolated
             IConfiguration configuration,
             ILoggerFactory loggerFactory)
         {
-            this.message = configuration["ResponseMessage"];
+            this.message = configuration["ResponseMessage"]!;
             this.log = loggerFactory.CreateLogger<SampleFunction>();
         }
 
