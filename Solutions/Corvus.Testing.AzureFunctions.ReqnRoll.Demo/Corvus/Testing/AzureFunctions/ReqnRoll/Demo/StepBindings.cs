@@ -2,17 +2,17 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Corvus.Testing.ReqnRoll.Demo.AzureFunctionsTesting
+namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo
 {
     using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
+    using Corvus.Testing.AzureFunctions;
+    using Corvus.Testing.AzureFunctions.ReqnRoll;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using NUnit.Framework;
-    using Corvus.Testing.AzureFunctions;
-    using Corvus.Testing.AzureFunctions.ReqnRoll;
     using Reqnroll;
 
     [Binding]
@@ -32,7 +32,8 @@ namespace Corvus.Testing.ReqnRoll.Demo.AzureFunctionsTesting
         [Given("I have set additional configuration for functions instances")]
         public void GivenIHaveSetAdditionalConfigurationForFunctionsInstances(Table table)
         {
-            FunctionConfiguration functionConfiguration = FunctionsBindings.GetFunctionConfiguration(this.scenarioContext);
+            FunctionConfiguration functionConfiguration =
+                FunctionsBindings.GetFunctionConfiguration(this.scenarioContext);
 
             foreach (DataTableRow row in table.Rows)
             {
@@ -61,7 +62,7 @@ namespace Corvus.Testing.ReqnRoll.Demo.AzureFunctionsTesting
                 requestBody.Add(row[0], row[1]);
             }
 
-            var content = new StringContent(requestBody.ToString(Formatting.None), Encoding.UTF8, "application/json");
+            StringContent content = new(requestBody.ToString(Formatting.None), Encoding.UTF8, "application/json");
 
             this.lastHttpResponseMessage = await this.client.PostAsync(uri, content).ConfigureAwait(false);
         }

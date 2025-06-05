@@ -61,23 +61,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <ReqnRollFeatureFiles Update="AzureFunctionsTesting\ScenariosUsingPerFeatureHookInProcess.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </ReqnRollFeatureFiles>
-    <ReqnRollFeatureFiles Update="AzureFunctionsTesting\ScenariosUsingPerFeatureHookWithAdditionalConfigurationInProcess.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </ReqnRollFeatureFiles>
-    <ReqnRollFeatureFiles Update="AzureFunctionsTesting\ScenariosUsingPerScenarioHookInProcess.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </ReqnRollFeatureFiles>
-    <ReqnRollFeatureFiles Update="AzureFunctionsTesting\ScenariosUsingPerScenarioHookWithAdditionalConfigurationInProcess.feature">
-      <Visible>$(UsingMicrosoftNETSdk)</Visible>
-      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-    </ReqnRollFeatureFiles>
-  </ItemGroup>
-
 </Project>

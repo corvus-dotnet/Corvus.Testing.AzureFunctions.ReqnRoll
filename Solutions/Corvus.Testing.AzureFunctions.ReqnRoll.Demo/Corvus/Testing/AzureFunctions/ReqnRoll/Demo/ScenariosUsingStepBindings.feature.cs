@@ -10,17 +10,16 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace AzureFunctionsTesting
+using Reqnroll;
+namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo
 {
-    using Reqnroll;
-    using System;
-    using System.Linq;
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
-    [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Using step bindings")]
+    [NUnit.Framework.FixtureLifeCycleAttribute(NUnit.Framework.LifeCycle.InstancePerTestCase)]
     public partial class UsingStepBindingsFeature
     {
         
@@ -28,42 +27,64 @@ namespace AzureFunctionsTesting
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "AzureFunctionsTesting", "Using step bindings", "\tIn order to test my Azure functions\r\n\tAs a developer\r\n\tI want to be able to star" +
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Corvus/Testing/AzureFunctions/ReqnRoll/Demo", "Using step bindings", "\tIn order to test my Azure functions\r\n\tAs a developer\r\n\tI want to be able to star" +
                 "t an Azure function from a step in my Scenario", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
 #line 1 "ScenariosUsingStepBindings.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
-        public static async System.Threading.Tasks.Task FeatureSetupAsync()
+        public static async global::System.Threading.Tasks.Task FeatureSetupAsync()
         {
         }
         
         [NUnit.Framework.OneTimeTearDownAttribute()]
-        public static async System.Threading.Tasks.Task FeatureTearDownAsync()
+        public static async global::System.Threading.Tasks.Task FeatureTearDownAsync()
         {
         }
         
         [NUnit.Framework.SetUpAttribute()]
-        public async System.Threading.Tasks.Task TestInitializeAsync()
+        public async global::System.Threading.Tasks.Task TestInitializeAsync()
         {
             testRunner = global::Reqnroll.TestRunnerManager.GetTestRunnerForAssembly(featureHint: featureInfo);
-            if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Equals(featureInfo) == false)))
+            try
             {
-                await testRunner.OnFeatureEndAsync();
+                if (((testRunner.FeatureContext != null) 
+                            && (testRunner.FeatureContext.FeatureInfo.Equals(featureInfo) == false)))
+                {
+                    await testRunner.OnFeatureEndAsync();
+                }
             }
-            if ((testRunner.FeatureContext == null))
+            finally
             {
-                await testRunner.OnFeatureStartAsync(featureInfo);
+                if (((testRunner.FeatureContext != null) 
+                            && testRunner.FeatureContext.BeforeFeatureHookFailed))
+                {
+                    throw new global::Reqnroll.ReqnrollException("Scenario skipped because of previous before feature hook error");
+                }
+                if ((testRunner.FeatureContext == null))
+                {
+                    await testRunner.OnFeatureStartAsync(featureInfo);
+                }
             }
         }
         
         [NUnit.Framework.TearDownAttribute()]
-        public async System.Threading.Tasks.Task TestTearDownAsync()
+        public async global::System.Threading.Tasks.Task TestTearDownAsync()
         {
-            await testRunner.OnScenarioEndAsync();
-            global::Reqnroll.TestRunnerManager.ReleaseTestRunner(testRunner);
+            if ((testRunner == null))
+            {
+                return;
+            }
+            try
+            {
+                await testRunner.OnScenarioEndAsync();
+            }
+            finally
+            {
+                global::Reqnroll.TestRunnerManager.ReleaseTestRunner(testRunner);
+                testRunner = null;
+            }
         }
         
         public void ScenarioInitialize(global::Reqnroll.ScenarioInfo scenarioInfo)
@@ -72,12 +93,12 @@ namespace AzureFunctionsTesting
             testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
         
-        public async System.Threading.Tasks.Task ScenarioStartAsync()
+        public async global::System.Threading.Tasks.Task ScenarioStartAsync()
         {
             await testRunner.OnScenarioStartAsync();
         }
         
-        public async System.Threading.Tasks.Task ScenarioCleanupAsync()
+        public async global::System.Threading.Tasks.Task ScenarioCleanupAsync()
         {
             await testRunner.CollectScenarioErrorsAsync();
         }
@@ -86,10 +107,10 @@ namespace AzureFunctionsTesting
         [NUnit.Framework.DescriptionAttribute("A Get request including a name in the querystring is successful")]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
-        public async System.Threading.Tasks.Task AGetRequestIncludingANameInTheQuerystringIsSuccessful(string function, string runtime, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task AGetRequestIncludingANameInTheQuerystringIsSuccessful(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("function", function);
             argumentsOfScenario.Add("runtime", runtime);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A Get request including a name in the querystring is successful", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -124,10 +145,10 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("A Get request without providing a name in the querystring fails.")]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
-        public async System.Threading.Tasks.Task AGetRequestWithoutProvidingANameInTheQuerystringFails_(string function, string runtime, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task AGetRequestWithoutProvidingANameInTheQuerystringFails_(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("function", function);
             argumentsOfScenario.Add("runtime", runtime);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A Get request without providing a name in the querystring fails.", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -159,10 +180,10 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("A Post request including a name in the querystring is successful")]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
-        public async System.Threading.Tasks.Task APostRequestIncludingANameInTheQuerystringIsSuccessful(string function, string runtime, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task APostRequestIncludingANameInTheQuerystringIsSuccessful(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("function", function);
             argumentsOfScenario.Add("runtime", runtime);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A Post request including a name in the querystring is successful", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -197,10 +218,10 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("A Post request including a name in the request body is successful")]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
-        public async System.Threading.Tasks.Task APostRequestIncludingANameInTheRequestBodyIsSuccessful(string function, string runtime, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task APostRequestIncludingANameInTheRequestBodyIsSuccessful(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("function", function);
             argumentsOfScenario.Add("runtime", runtime);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A Post request including a name in the request body is successful", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -242,10 +263,10 @@ this.ScenarioInitialize(scenarioInfo);
             "in the querystring")]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
-        public async System.Threading.Tasks.Task APostRequestIncludingNamesInTheQuerystringAndRequestBodyUsesTheNameInTheQuerystring(string function, string runtime, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task APostRequestIncludingNamesInTheQuerystringAndRequestBodyUsesTheNameInTheQuerystring(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("function", function);
             argumentsOfScenario.Add("runtime", runtime);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A Post request including names in the querystring and request body uses the name " +
@@ -288,10 +309,10 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("A Post request without a querystring or request body fails")]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
-        public async System.Threading.Tasks.Task APostRequestWithoutAQuerystringOrRequestBodyFails(string function, string runtime, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task APostRequestWithoutAQuerystringOrRequestBodyFails(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("function", function);
             argumentsOfScenario.Add("runtime", runtime);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A Post request without a querystring or request body fails", null, tagsOfScenario, argumentsOfScenario, featureTags);
@@ -323,10 +344,10 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.DescriptionAttribute("Supplying an alternative greeting via configuration")]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.InProcess", "net8.0", null)]
         [NUnit.Framework.TestCaseAttribute("Corvus.Testing.AzureFunctions.Demo.Isolated", "net8.0", null)]
-        public async System.Threading.Tasks.Task SupplyingAnAlternativeGreetingViaConfiguration(string function, string runtime, string[] exampleTags)
+        public async global::System.Threading.Tasks.Task SupplyingAnAlternativeGreetingViaConfiguration(string function, string runtime, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("function", function);
             argumentsOfScenario.Add("runtime", runtime);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Supplying an alternative greeting via configuration", null, tagsOfScenario, argumentsOfScenario, featureTags);

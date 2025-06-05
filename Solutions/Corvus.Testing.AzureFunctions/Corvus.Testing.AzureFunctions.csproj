@@ -1,32 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
+    <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <Copyright>Copyright (c) Endjin Limited 2025. All rights reserved.</Copyright>
-    <NoWarn>RCS1194</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Copyright>Copyright (c) Endjin Limited 2025. All rights reserved.</Copyright>
+        <NoWarn>RCS1194</NoWarn>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <IsTestProject>false</IsTestProject>
-    <TestProject>false</TestProject>
-  </PropertyGroup>
+    <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
+        <TestProject>false</TestProject>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageDescription></PackageDescription>
-    <PackageTags></PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <RootNamespace />
-  </PropertyGroup>
+    <PropertyGroup>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageDescription>A lightweight framework for integration testing of Azure Functions applications. Provides utilities and abstractions for programmatically starting, configuring, and stopping Azure Functions instances during test execution. Supports managing function runtime processes, environment variables, port allocation, and output capture to enable reliable and repeatable testing of Azure Functions across different environments.</PackageDescription>
+        <PackageTags>Azure Functions, Corvus, Testing, Integration Testing</PackageTags>
+        <PackageReleaseNotes></PackageReleaseNotes>
+        <RootNamespace />
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.18">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[8.0.*,)" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.18">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[8.0.*,)" />
+    </ItemGroup>
+
 </Project>

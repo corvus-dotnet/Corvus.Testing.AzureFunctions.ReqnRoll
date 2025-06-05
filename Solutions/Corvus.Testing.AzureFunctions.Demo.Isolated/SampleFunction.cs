@@ -19,7 +19,8 @@ namespace Corvus.Testing.AzureFunctions.Demo.Isolated
         }
 
         [Function("SampleFunction-Get")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "{*path}")] HttpRequestData req)
+        public async Task<HttpResponseData> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "{*path}")] HttpRequestData req)
         {
             // Note: the demo function has the log level set to "None" in host.json. This is intentional, to show that
             // our code in Corvus.Testing.AzureFunctions is able to detect that the function has started correctly
@@ -31,7 +32,8 @@ namespace Corvus.Testing.AzureFunctions.Demo.Isolated
             try
             {
                 using JsonDocument doc = await JsonDocument.ParseAsync(req.Body);
-                if (doc.RootElement.TryGetProperty("name", out JsonElement nameElement) && nameElement.ValueKind == JsonValueKind.String)
+                if (doc.RootElement.TryGetProperty("name", out JsonElement nameElement) &&
+                    nameElement.ValueKind == JsonValueKind.String)
                 {
                     name ??= nameElement.GetString();
                 }
@@ -53,7 +55,6 @@ namespace Corvus.Testing.AzureFunctions.Demo.Isolated
                 response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
 
                 await response.WriteStringAsync(this.message.Replace("{name}", name));
-
             }
 
             return response;
