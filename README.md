@@ -1,6 +1,6 @@
 # Corvus.Testing.AzureFunctions.ReqnRoll
 
-[![Build Status](https://dev.azure.com/endjin-labs/Corvus.Testing.AzureFunctions.ReqnRoll/_apis/build/status/corvus-dotnet.Corvus.Testing.AzureFunctions.ReqnRoll?branchName=main)](https://dev.azure.com/endjin-labs/Corvus.Testing.AzureFunctions.ReqnRoll/_build/latest?definitionId=4&branchName=main)
+[![Build Status](https://github.com/corvus-dotnet/Corvus.Testing.AzureFunctions.ReqnRoll/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/corvus-dotnet/Corvus.Testing.AzureFunctions.ReqnRoll/actions/workflows/build.yml)
 [![GitHub license](https://img.shields.io/badge/License-Apache%202-blue.svg)](https://raw.githubusercontent.com/corvus-dotnet/Corvus.Testing.AzureFunctions.ReqnRoll/main/LICENSE)
 
 A comprehensive testing framework for Azure Functions that integrates with ReqnRoll (formerly SpecFlow) to enable behaviour-driven development (BDD) testing of Azure Functions projects.
@@ -9,7 +9,7 @@ A comprehensive testing framework for Azure Functions that integrates with ReqnR
 
 - ✅ **Programmatically start and stop Azure Functions instances** for testing
 - ✅ **Support for both In-Process and Isolated Azure Functions models**
-- ✅ **ReqnRoll/SpecFlow integration** with step definitions and hooks
+- ✅ **ReqnRoll integration** with step definitions and hooks
 - ✅ **Port management and conflict resolution** for parallel test execution
 - ✅ **Environment variable configuration** for test scenarios
 - ✅ **Process output capture and logging** for debugging
