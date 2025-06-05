@@ -5,6 +5,7 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+        <NoWarn>SA0001;SA1204;SA1600;SA1602;CS1591</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
