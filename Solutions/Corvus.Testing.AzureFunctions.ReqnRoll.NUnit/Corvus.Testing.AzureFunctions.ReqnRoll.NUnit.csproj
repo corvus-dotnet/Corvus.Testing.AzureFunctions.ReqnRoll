@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Copyright>Copyright (c) Endjin Limited 2025. All rights reserved.</Copyright>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
+        <TestProject>false</TestProject>
+        <IsPackable>true</IsPackable>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IncludeContentInPack>true</IncludeContentInPack>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <RestoreLockedMode Condition="$(ContinuousIntegrationBuild) == 'true'">true</RestoreLockedMode>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Suppress the NuGet warning we're always going to get - ref: https://github.com/NuGet/Home/issues/8583 -->
+        <NoWarn>$(NoWarn);NU5128;SA1204;SA1600;SA1602;CS1591;SA1633;SA1117</NoWarn>
+        <RootNamespace>MetaPackage.ReqnRoll.AzureFunctions.NUnit</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageDescription>A metapackage that encapsulates the required dependencies when using Corvus.Testing.AzureFunctions.ReqnRoll.</PackageDescription>
+        <PackageTags>Reqnroll, Azure Functions, Corvus, Testing, Integration Testing, NUnit, metapackage</PackageTags>
+        <PackageReleaseNotes></PackageReleaseNotes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- This project takes depedency on nUnit that adds the TestContainer capability importing NUnit.props, but this is not a test project -->
+        <ProjectCapability Remove="TestContainer" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.18">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Corvus.Testing.ReqnRoll.NUnit" Version="4.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Corvus.Testing.AzureFunctions.ReqnRoll\Corvus.Testing.AzureFunctions.ReqnRoll.csproj" />
+    </ItemGroup>
+
+</Project>

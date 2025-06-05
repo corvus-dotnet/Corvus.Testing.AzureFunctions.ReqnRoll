@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="$(EndjinProjectPropsPath)" Condition="$(EndjinProjectPropsPath) != ''" />
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Copyright>Copyright (c) Endjin Limited 2025. All rights reserved.</Copyright>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <IsTestProject>false</IsTestProject>
+        <TestProject>false</TestProject>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <RestoreLockedMode Condition="$(ContinuousIntegrationBuild) == 'true'">true</RestoreLockedMode>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageDescription>Integration framework that enables behavior-driven development (BDD) testing of Azure Functions using ReqnRoll (formerly SpecFlow). Provides utilities for programmatically starting, configuring, and stopping Azure Functions instances during test execution, with seamless ReqnRoll integration for writing human-readable test specifications. Supports both In-Process and Isolated Azure Functions models.</PackageDescription>
+        <PackageTags>Reqnroll, Azure Functions, Corvus, Testing, Integration Testing</PackageTags>
+        <PackageReleaseNotes></PackageReleaseNotes>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- This project takes depedency on nUnit that adds the TestContainer capability importing NUnit.props, but this is not a test project -->
+        <ProjectCapability Remove="TestContainer" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Corvus.Testing.ReqnRoll" Version="4.0.5" />
+        <PackageReference Include="Endjin.RecommendedPractices.GitHub" Version="2.1.18">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="[8.0.*,)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Corvus.Testing.AzureFunctions\Corvus.Testing.AzureFunctions.csproj" />
+    </ItemGroup>
+</Project>
