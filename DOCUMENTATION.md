@@ -11,7 +11,7 @@ A comprehensive testing framework for Azure Functions that integrates with ReqnR
 - [Usage Patterns](#usage-patterns)
 - [Configuration](#configuration)
 - [Examples](#examples)
-- [Best Practices](#best-practices)
+- [Recommended Practices](#recommended-practices)
 - [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -372,7 +372,7 @@ public static class ConfiguredFunctionHooks
 }
 ```
 
-## Best Practices
+## Recommended Practices
 
 ### 1. Port Management
 - Use different ports for different test classes/features to avoid conflicts
