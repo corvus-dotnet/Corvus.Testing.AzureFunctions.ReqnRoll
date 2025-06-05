@@ -264,9 +264,7 @@ Configure ReqnRoll settings in your test project:
 **Function Code:**
 ```csharp
 [FunctionName("Hello")]
-public static async Task<IActionResult> Run(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
-    ILogger log)
+public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, ILogger log)
 {
     string name = req.Query["name"];
     return new OkObjectResult($"Hello, {name}!");
