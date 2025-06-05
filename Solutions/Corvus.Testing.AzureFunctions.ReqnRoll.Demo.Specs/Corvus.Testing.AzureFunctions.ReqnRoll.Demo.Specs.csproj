@@ -55,8 +55,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference
-            Include="..\Corvus.Testing.AzureFunctions.ReqnRoll\Corvus.Testing.AzureFunctions.ReqnRoll.csproj" />
+        <ProjectReference Include="..\Corvus.Testing.AzureFunctions.ReqnRoll\Corvus.Testing.AzureFunctions.ReqnRoll.csproj" />
         <ProjectReference Include="..\Corvus.Testing.AzureFunctions\Corvus.Testing.AzureFunctions.csproj" />
     </ItemGroup>
 

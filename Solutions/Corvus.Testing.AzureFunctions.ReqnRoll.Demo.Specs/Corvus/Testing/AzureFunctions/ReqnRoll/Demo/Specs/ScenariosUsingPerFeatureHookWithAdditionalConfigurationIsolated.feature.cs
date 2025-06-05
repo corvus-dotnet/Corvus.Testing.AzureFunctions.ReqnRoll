@@ -11,28 +11,28 @@
 #region Designer generated code
 #pragma warning disable
 using Reqnroll;
-namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo
+namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo.Specs
 {
     
     
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Feature using per-scenario hook with additional configuration isolated")]
+    [NUnit.Framework.DescriptionAttribute("Feature using per-feature hook with additional configuration isolated")]
     [NUnit.Framework.FixtureLifeCycleAttribute(NUnit.Framework.LifeCycle.InstancePerTestCase)]
-    [NUnit.Framework.CategoryAttribute("usingIsolatedDemoFunctionPerScenarioWithAdditionalConfiguration")]
-    public partial class FeatureUsingPer_ScenarioHookWithAdditionalConfigurationIsolatedFeature
+    [NUnit.Framework.CategoryAttribute("usingIsolatedDemoFunctionPerFeatureWithAdditionalConfiguration")]
+    public partial class FeatureUsingPer_FeatureHookWithAdditionalConfigurationIsolatedFeature
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private static string[] featureTags = new string[] {
-                "usingIsolatedDemoFunctionPerScenarioWithAdditionalConfiguration"};
+                "usingIsolatedDemoFunctionPerFeatureWithAdditionalConfiguration"};
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Corvus/Testing/AzureFunctions/ReqnRoll/Demo", "Feature using per-scenario hook with additional configuration isolated", "\tIn order to test my Azure functions\r\n\tAs a developer\r\n\tI want to be able to star" +
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Corvus/Testing/AzureFunctions/ReqnRoll/Demo/Specs", "Feature using per-feature hook with additional configuration isolated", "\tIn order to test my Azure functions\r\n\tAs a developer\r\n\tI want to be able to star" +
                 "t an Azure function with specific configuration for each scenario using a hook", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
-#line 1 "ScenariosUsingPerScenarioHookWithAdditionalConfigurationIsolated.feature"
+#line 1 "ScenariosUsingPerFeatureHookWithAdditionalConfigurationIsolated.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]

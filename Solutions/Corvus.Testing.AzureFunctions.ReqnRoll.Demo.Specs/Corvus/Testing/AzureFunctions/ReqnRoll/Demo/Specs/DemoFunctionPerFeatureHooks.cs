@@ -2,12 +2,15 @@
 // Copyright (c) Endjin Limited. All rights reserved.
 // </copyright>
 
-namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo
+namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo.Specs
 {
     using System.Threading.Tasks;
+
     using Corvus.Testing.AzureFunctions;
     using Corvus.Testing.AzureFunctions.ReqnRoll;
+
     using Microsoft.Extensions.Logging;
+
     using Reqnroll;
 
     [Binding]

@@ -11,28 +11,28 @@
 #region Designer generated code
 #pragma warning disable
 using Reqnroll;
-namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo
+namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo.Specs
 {
     
     
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "2.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Feature using per-scenario hook in-process")]
+    [NUnit.Framework.DescriptionAttribute("Feature using per-feature hook in-process")]
     [NUnit.Framework.FixtureLifeCycleAttribute(NUnit.Framework.LifeCycle.InstancePerTestCase)]
-    [NUnit.Framework.CategoryAttribute("usingInProcessDemoFunctionPerScenario")]
-    public partial class FeatureUsingPer_ScenarioHookIn_ProcessFeature
+    [NUnit.Framework.CategoryAttribute("usingInProcessDemoFunctionPerFeature")]
+    public partial class FeatureUsingPer_FeatureHookIn_ProcessFeature
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private static string[] featureTags = new string[] {
-                "usingInProcessDemoFunctionPerScenario"};
+                "usingInProcessDemoFunctionPerFeature"};
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Corvus/Testing/AzureFunctions/ReqnRoll/Demo", "Feature using per-scenario hook in-process", "\tIn order to test my Azure functions\r\n\tAs a developer\r\n\tI want to be able to star" +
-                "t an Azure function for each scenario using a hook", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Corvus/Testing/AzureFunctions/ReqnRoll/Demo/Specs", "Feature using per-feature hook in-process", "\tIn order to test my Azure functions\r\n\tAs a developer\r\n\tI want to be able to star" +
+                "t an Azure function for each feature using a hook", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
-#line 1 "ScenariosUsingPerScenarioHookInProcess.feature"
+#line 1 "ScenariosUsingPerFeatureHookInProcess.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
@@ -209,14 +209,14 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-                global::Reqnroll.Table table5 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table1 = new global::Reqnroll.Table(new string[] {
                             "PropertyName",
                             "Value"});
-                table5.AddRow(new string[] {
+                table1.AddRow(new string[] {
                             "name",
                             "Jon"});
 #line 23
- await testRunner.WhenAsync("I send a POST request to \'http://localhost:7075/\' with data in the request body", ((string)(null)), table5, "When ");
+ await testRunner.WhenAsync("I send a POST request to \'http://localhost:7075/\' with data in the request body", ((string)(null)), table1, "When ");
 #line hidden
 #line 26
  await testRunner.ThenAsync("I receive a 200 response code", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
@@ -247,15 +247,15 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 await this.ScenarioStartAsync();
-                global::Reqnroll.Table table6 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table2 = new global::Reqnroll.Table(new string[] {
                             "PropertyName",
                             "Value"});
-                table6.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "name",
                             "Jonathan"});
 #line 30
  await testRunner.WhenAsync("I send a POST request to \'http://localhost:7075/?name=Jon\' with data in the reque" +
-                        "st body", ((string)(null)), table6, "When ");
+                        "st body", ((string)(null)), table2, "When ");
 #line hidden
 #line 33
  await testRunner.ThenAsync("I receive a 200 response code", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");

@@ -11,7 +11,7 @@
 #region Designer generated code
 #pragma warning disable
 using Reqnroll;
-namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo
+namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo.Specs
 {
     
     
@@ -29,7 +29,7 @@ namespace Corvus.Testing.AzureFunctions.ReqnRoll.Demo
         private static string[] featureTags = new string[] {
                 "usingInProcessDemoFunctionPerFeatureWithAdditionalConfiguration"};
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Corvus/Testing/AzureFunctions/ReqnRoll/Demo", "Feature using per-feature hook with additional configuration in-process", "\tIn order to test my Azure functions\r\n\tAs a developer\r\n\tI want to be able to star" +
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Corvus/Testing/AzureFunctions/ReqnRoll/Demo/Specs", "Feature using per-feature hook with additional configuration in-process", "\tIn order to test my Azure functions\r\n\tAs a developer\r\n\tI want to be able to star" +
                 "t an Azure function with specific configuration for each scenario using a hook", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
 #line 1 "ScenariosUsingPerFeatureHookWithAdditionalConfigurationInProcess.feature"
