@@ -28,7 +28,7 @@
 
     <PropertyGroup>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageDescription>A metapackage that encapsulates the required dependencies when using Corvus.Testing.AzureFunctions.ReqnRoll and Endjin's standard practises.  Also simplifies the dependency management process when using tools like Dependabot.</PackageDescription>
+        <PackageDescription>A metapackage that encapsulates the required dependencies when using Corvus.Testing.AzureFunctions.ReqnRoll.</PackageDescription>
         <PackageTags>Reqnroll, Azure Functions, Corvus, Testing, Integration Testing, NUnit, metapackage</PackageTags>
         <PackageReleaseNotes></PackageReleaseNotes>
     </PropertyGroup>

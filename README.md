@@ -3,7 +3,7 @@
 [![Build Status](https://dev.azure.com/endjin-labs/Corvus.Testing.AzureFunctions.ReqnRoll/_apis/build/status/corvus-dotnet.Corvus.Testing.AzureFunctions.ReqnRoll?branchName=main)](https://dev.azure.com/endjin-labs/Corvus.Testing.AzureFunctions.ReqnRoll/_build/latest?definitionId=4&branchName=main)
 [![GitHub license](https://img.shields.io/badge/License-Apache%202-blue.svg)](https://raw.githubusercontent.com/corvus-dotnet/Corvus.Testing.AzureFunctions.ReqnRoll/main/LICENSE)
 
-A comprehensive testing framework for Azure Functions that integrates with ReqnRoll (formerly SpecFlow) to enable behavior-driven development (BDD) testing of Azure Functions projects.
+A comprehensive testing framework for Azure Functions that integrates with ReqnRoll (formerly SpecFlow) to enable behaviour-driven development (BDD) testing of Azure Functions projects.
 
 ## 🚀 Features
 
@@ -18,10 +18,11 @@ A comprehensive testing framework for Azure Functions that integrates with ReqnR
 
 ## 📦 Packages
 
-| Package | Description | NuGet |
-|---------|-------------|-------|
-| `Corvus.Testing.AzureFunctions` | Core functionality for managing Azure Functions instances | [![NuGet](https://img.shields.io/nuget/v/Corvus.Testing.AzureFunctions.svg)](https://www.nuget.org/packages/Corvus.Testing.AzureFunctions/) |
-| `Corvus.Testing.AzureFunctions.ReqnRoll` | ReqnRoll integration for BDD testing | [![NuGet](https://img.shields.io/nuget/v/Corvus.Testing.AzureFunctions.ReqnRoll.svg)](https://www.nuget.org/packages/Corvus.Testing.AzureFunctions.ReqnRoll/) |
+| Package                                        | Description                                                                                                 | NuGet                                                                                                                                                                     |
+|------------------------------------------------|-------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Corvus.Testing.AzureFunctions`                | Core functionality for managing Azure Functions instances                                                   | [![NuGet](https://img.shields.io/nuget/v/Corvus.Testing.AzureFunctions.svg)](https://www.nuget.org/packages/Corvus.Testing.AzureFunctions/)                               |
+| `Corvus.Testing.AzureFunctions.ReqnRoll`       | ReqnRoll integration for BDD testing                                                                        | [![NuGet](https://img.shields.io/nuget/v/Corvus.Testing.AzureFunctions.ReqnRoll.svg)](https://www.nuget.org/packages/Corvus.Testing.AzureFunctions.ReqnRoll/)             |
+| `Corvus.Testing.AzureFunctions.ReqnRoll.NUnit` | A metapackage that encapsulates the required dependencies when using Corvus.Testing.AzureFunctions.ReqnRoll | [![NuGet](https://img.shields.io/nuget/v/Corvus.Testing.AzureFunctions.ReqnRoll.NUnit.svg)](https://www.nuget.org/packages/Corvus.Testing.AzureFunctions.ReqnRoll.NUnit/) |
 
 ## 🏃 Quick Start
 

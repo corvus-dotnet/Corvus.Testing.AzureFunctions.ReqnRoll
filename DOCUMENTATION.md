@@ -45,8 +45,7 @@ public sealed class FunctionsController
 {
     public FunctionsController(ILogger logger)
 
-    public async Task StartFunctionsInstanceAsync(string path, int port, string runtime, 
-        string provider = "csharp", FunctionConfiguration? configuration = null)
+    public async Task StartFunctionsInstanceAsync(string path, int port, string runtime, string provider = "csharp", FunctionConfiguration? configuration = null)
     
     public async Task TeardownFunctionsAsync(CancellationToken cancellationToken = default)
     
@@ -138,7 +137,7 @@ using Corvus.Testing.AzureFunctions;
 
 var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 var logger = loggerFactory.CreateLogger<FunctionsController>();
-var controller = new FunctionsController(logger);
+FunctionsController controller = new(logger);
 ```
 
 2. **Start a Functions Instance:**
@@ -167,14 +166,14 @@ Start and stop functions for each individual test:
 [Test]
 public async Task TestMyFunction()
 {
-    var controller = new FunctionsController(logger);
-    
+    FunctionsController controller = new(logger);
+
     try
     {
         await controller.StartFunctionsInstanceAsync("MyFunctionApp", 7071, "net8.0");
 
         // Perform your tests
-        using var client = new HttpClient();
+        using HttpClient client = new();
         var response = await client.GetAsync("http://localhost:7071/api/MyFunction");
         
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -215,7 +214,7 @@ public static class FunctionHooks
 Run multiple function apps simultaneously:
 
 ```csharp
-var controller = new FunctionsController(logger);
+FunctionsController controller = new(logger);
 
 // Start multiple functions on different ports
 await Task.WhenAll(
@@ -234,7 +233,7 @@ await Task.WhenAll(
 Configure your functions using [`FunctionConfiguration`](Solutions/Corvus.Testing.AzureFunctions/Corvus/Testing/AzureFunctions/FunctionConfiguration.cs):
 
 ```csharp
-var config = new FunctionConfiguration();
+FunctionConfiguration config = new();
 config.EnvironmentVariables["CosmosDB:ConnectionString"] = "AccountEndpoint=...";
 config.EnvironmentVariables["ServiceBus:ConnectionString"] = "Endpoint=...";
 config.EnvironmentVariables["ApplicationInsights:InstrumentationKey"] = "test-key";
@@ -279,12 +278,12 @@ public static async Task<IActionResult> Run(
 [Test]
 public async Task HelloFunction_ReturnsGreeting()
 {
-    var controller = new FunctionsController(logger);
+    FunctionsController controller = new(logger);
     await controller.StartFunctionsInstanceAsync("HelloApp", 7071, "net8.0");
 
     try
     {
-        using var client = new HttpClient();
+        using HttpClient client = new();
         var response = await client.GetAsync("http://localhost:7071/api/Hello?name=World");
         var content = await response.Content.ReadAsStringAsync();
         
@@ -331,7 +330,7 @@ public class HelloSteps
     [When(@"I send a GET request to '([^']*)'")]
     public async Task WhenISendAGetRequestTo(string url)
     {
-        using var client = new HttpClient();
+        using HttpClient client = new();
         this.lastResponse = await client.GetAsync(url);
     }
 
@@ -344,7 +343,7 @@ public class HelloSteps
     [Then(@"the response body contains the text '([^']*)'")]
     public async Task ThenTheResponseBodyContainsTheText(string expectedText)
     {
-        var content = await this.lastResponse!.Content.ReadAsStringAsync();
+        string content = await this.lastResponse!.Content.ReadAsStringAsync();
         Assert.IsTrue(content.Contains(expectedText));
     }
 }
