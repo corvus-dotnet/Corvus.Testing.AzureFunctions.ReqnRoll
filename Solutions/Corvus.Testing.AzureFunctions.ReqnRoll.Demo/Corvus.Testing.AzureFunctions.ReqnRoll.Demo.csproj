@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Copyright>Copyright (c) Endjin Limited 2024. All rights reserved.</Copyright>
+    <Copyright>Copyright (c) Endjin Limited 2025. All rights reserved.</Copyright>
     <LangVersion>latest</LangVersion>
     <!-- Disabling SA1204 because it prioritizes static/non-static over public/non-public, which doesn't fit very well
          with bindings in ReqnRoll.
@@ -47,7 +47,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="[8.0.*,)" />
-    <PackageReference Include="Corvus.Testing.ReqnRoll.NUnit" Version="4.0.3" />
+    <PackageReference Include="Corvus.Testing.ReqnRoll.NUnit" Version="4.0.5" />
   </ItemGroup>
 
   <ItemGroup>

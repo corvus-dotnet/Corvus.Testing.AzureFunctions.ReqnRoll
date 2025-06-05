@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <Copyright>Copyright (c) Endjin Limited 2024. All rights reserved.</Copyright>
+        <Copyright>Copyright (c) Endjin Limited 2025. All rights reserved.</Copyright>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -28,12 +28,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Corvus.Testing.ReqnRoll.NUnit" Version="4.0.3" />
+        <PackageReference Include="Corvus.Testing.ReqnRoll.NUnit" Version="4.0.5" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference
-            Include="..\Corvus.Testing.AzureFunctions.ReqnRoll\Corvus.Testing.AzureFunctions.ReqnRoll.csproj" />
+        <ProjectReference Include="..\Corvus.Testing.AzureFunctions.ReqnRoll\Corvus.Testing.AzureFunctions.ReqnRoll.csproj" />
     </ItemGroup>
 
 </Project>
