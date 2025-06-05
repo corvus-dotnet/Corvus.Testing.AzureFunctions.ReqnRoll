@@ -41,7 +41,7 @@ permissions:
 jobs:
   build:
     name: Run Build
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       semver: ${{ steps.run_build.outputs.semver }}
       major: ${{ steps.run_build.outputs.major }}
