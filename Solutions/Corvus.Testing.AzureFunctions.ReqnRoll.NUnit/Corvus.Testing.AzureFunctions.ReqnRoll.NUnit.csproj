@@ -10,6 +10,9 @@
     <PropertyGroup>
         <IsTestProject>false</IsTestProject>
         <TestProject>false</TestProject>
+        <IsPackable>true</IsPackable>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IncludeContentInPack>true</IncludeContentInPack>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -18,16 +21,16 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <!-- Suppress the NuGet warning we're always going to get - ref: https://github.com/NuGet/Home/issues/8583 -->
+        <NoWarn>$(NoWarn);NU5128;SA1204;SA1600;SA1602;CS1591;SA1633;SA1117</NoWarn>
+        <RootNamespace>MetaPackage.ReqnRoll.AzureFunctions.NUnit</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageDescription>A metapackage that encapsulates the required dependencies when using Corvus.Testing.AzureFunctions.ReqnRoll and Endjin's standard practises.  Also simplifies the dependency management process when using tools like Dependabot.</PackageDescription>
         <PackageTags>Reqnroll, Azure Functions, Corvus, Testing, Integration Testing, NUnit, metapackage</PackageTags>
         <PackageReleaseNotes></PackageReleaseNotes>
-        <RootNamespace>MetaPackage.ReqnRoll.AzureFunctions.NUnit</RootNamespace>
-        <IsPackable>true</IsPackable>
-        <IncludeBuildOutput>false</IncludeBuildOutput>
-        <IncludeContentInPack>false</IncludeContentInPack>
-        <!-- Suppress the NuGet warning we're always going to get - ref: https://github.com/NuGet/Home/issues/8583 -->
-        <NoWarn>$(NoWarn);NU5128;SA1204;SA1600;SA1602;CS1591;SA1633;SA1117</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -44,8 +47,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference
-            Include="..\Corvus.Testing.AzureFunctions.ReqnRoll\Corvus.Testing.AzureFunctions.ReqnRoll.csproj" />
+        <ProjectReference Include="..\Corvus.Testing.AzureFunctions.ReqnRoll\Corvus.Testing.AzureFunctions.ReqnRoll.csproj" />
     </ItemGroup>
 
 </Project>
