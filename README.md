@@ -131,3 +131,6 @@ This project is maintained by [endjin](https://endjin.com/) and builds upon the 
 ---
 
 *For questions, issues, or feature requests, please [open an issue](https://github.com/corvus-dotnet/Corvus.Testing.AzureFunctions.ReqnRoll/issues) on GitHub.*
+
+[![OpenChain](https://imm.endjin.com/api/imm/github/corvus-dotnet/Corvus.Testing.AzureFunctions.ReqnRoll/rule/66efac1a-662c-40cf-b4ec-8b34c29e9fd7?cache=false)](https://imm.endjin.com/api/imm/github/corvus-dotnet/Corvus.Testing.AzureFunctions.ReqnRoll/rule/66efac1a-662c-40cf-b4ec-8b34c29e9fd7?cache=false)
+
