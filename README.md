@@ -5,6 +5,10 @@
 
 A comprehensive testing framework for Azure Functions that integrates with ReqnRoll (formerly SpecFlow) to enable behaviour-driven development (BDD) testing of Azure Functions projects.
 
+This repository contains the Azure Functions libraries originally published at the deprecated [Corvus.Testing](https://github.com/corvus-dotnet/Corvus.Testing) repo. The readme of that repository has been updated with an explaination and the list of new packages.
+
+This project builds upon the [Corvus.Testing.ReqnRoll](https://github.com/corvus-dotnet/Corvus.Testing.ReqnRoll) repository but we've split the core testing framework from platform integrations (i.e. Azure Functions) because these evolve at different rates and have different levels of stability.
+
 ## 🚀 Features
 
 - ✅ **Programmatically start and stop Azure Functions instances** for testing
