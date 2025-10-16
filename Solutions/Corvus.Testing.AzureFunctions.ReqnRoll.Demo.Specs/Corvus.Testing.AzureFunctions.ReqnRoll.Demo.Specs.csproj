@@ -50,7 +50,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="[8.0.*,)" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.10" />
         <PackageReference Include="Corvus.Testing.ReqnRoll.NUnit" Version="4.0.5" />
     </ItemGroup>
 
